@@ -23,12 +23,19 @@ def debug(title, color=32, *msg):
         print(f'\033[{color}m{title}\033[0m', *msg)
 
 
-template = """
-<html><head><meta charset="utf-8"></head><body><pre>\n
+template = """<html><head><meta charset="utf-8"></head>
+<body><pre>\n
 {name}\n
 {body}
-</pre></body></html>
-"""
+</pre></body>
+</html>"""
+
+index_template = """
+<html><head><meta charset="utf-8"></head><body>
+{name}<br>
+{body}
+</pre></body></html>"""
+
 
 def parse_day(name, url):
     info = {
@@ -78,7 +85,7 @@ def parse_day(name, url):
                 )
                 info['lines'] += 1
                 body += line + '\n'
-            return body, info
+        return body, info
     except Exception as e:
         info['aborted'] = str(e)
         return body, info
@@ -129,15 +136,22 @@ if __name__ == '__main__':
         message = server.message()
         message.add('<pre>')
     if args.all:
+        index = ''
         for url, name in channel_names():
             c['counter'] += 1
+            if c['counter'] == 5: break
             with open(f'{paren_dir}/out/{name}.html', 'w') as f:
-               body, info = parse_day(name, url)
-               if 'aborted' in info:
-                   c['aborted'] += 1
-               if args.email:
-                   message.add(pformat(info))
-               f.write(template.format(name=name, body=body))
+                body, info = parse_day(name, url)
+                if 'aborted' in info:
+                    c['aborted'] += 1
+                if args.email:
+                    message.add(pformat(info))
+                f.write(template.format(name=name, body=body))
+                index += f'<a href="{name}.html">{name}</a>\n<br>'
+        with open(f'{paren_dir}/out/index.html', 'w') as f:
+            f.write(index_template.format(name='index', body=index))
+            debug('index written')
+
     elif args.channel_name:
         with open(f'{paren_dir}/out/{args.channel_name}.html', 'w') as f:
             body, info = parse_day(args.channel_name, args.channel_url)
