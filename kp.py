@@ -3,6 +3,7 @@
 Polish TV stations listing scraper for my blind uncle.
 """
 import datetime
+import os
 import re
 import sys
 from argparse import ArgumentParser
@@ -114,6 +115,7 @@ def parse_args():
         assert args.channel_url
 
 if __name__ == '__main__':
+    paren_dir = os.path.realpath(os.path.join(__file__, '..'))
     parse_args()
     c = Counter()
 
@@ -129,7 +131,7 @@ if __name__ == '__main__':
     if args.all:
         for url, name in channel_names():
             c['counter'] += 1
-            with open(f'out/{name}.html', 'w') as f:
+            with open(f'{paren_dir}/out/{name}.html', 'w') as f:
                body, info = parse_day(name, url)
                if 'aborted' in info:
                    c['aborted'] += 1
@@ -137,7 +139,7 @@ if __name__ == '__main__':
                    message.add(pformat(info))
                f.write(template.format(name=name, body=body))
     elif args.channel_name:
-        with open(f'out/{args.channel_name}.html', 'w') as f:
+        with open(f'{paren_dir}/out/{args.channel_name}.html', 'w') as f:
             body, info = parse_day(args.channel_name, args.channel_url)
             if args.email:
                 message.add(pformat(info))
