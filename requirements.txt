@@ -1,0 +1,4 @@
+Babel==2.6.0
+pyquery==1.4.0
+ipython==7.4.0
+colored-traceback==0.3.0
