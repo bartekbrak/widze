@@ -139,7 +139,6 @@ if __name__ == '__main__':
         index = ''
         for url, name in channel_names():
             c['counter'] += 1
-            if c['counter'] == 5: break
             with open(f'{paren_dir}/out/{name}.html', 'w') as f:
                 body, info = parse_day(name, url)
                 if 'aborted' in info:
