@@ -3,3 +3,8 @@ pyquery==1.4.0
 ipython==7.4.0
 colored-traceback==0.3.0
 email-to==0.1.0
+pandas==0.24.2
+pdbpp==0.10.0
+pytest==5.0.1
+pydantic==0.29
+lxml==4.3.4
